@@ -5,6 +5,8 @@ export class UserModel {
   city: string = ''
   age: number = 0
   email: string = ''
+  password: string = ''
   gender: string = ''
   avatar: string = ''
+  admin: boolean = false
 }

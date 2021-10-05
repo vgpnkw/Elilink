@@ -37,4 +37,13 @@ export class ApiService {
         return res
       }))
   }
+
+
+  clickUser(id: number){
+    // @ts-ignore
+    return this.http.get<any>("http://localhost:3000/users/" + id )
+      .pipe(map((res:any) =>{
+        return res
+      }))
+  }
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-register',
@@ -10,7 +11,7 @@ import {Router} from "@angular/router";
 })
 export class RegisterComponent implements OnInit {
   registerForm !: FormGroup
-  constructor(private formBuilder : FormBuilder, private http: HttpClient, private router: Router) { }
+  constructor(private formBuilder : FormBuilder, private http: HttpClient, private router: Router, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group({
@@ -22,14 +23,22 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
-    this.http.post<any>("http://localhost:3000/registerUsers", this.registerForm.value)
+    this.http.post<any>("http://localhost:3000/users", this.registerForm.value)
       .subscribe((res : any) => {
-        alert("Register!!")
+        this.showToastrGood("User","has been register")
         this.registerForm.reset()
         this.router.navigate(["login"])
       }, (err: Error) => {
-        alert(err.message )
+        this.showToastrGood("Error",err.message)
       })
+  }
+
+  showToastrGood(message: string, title: string) {
+    this.toastr.success(message,title)
+  }
+
+  showToastrErr(message: string, title: string) {
+    this.toastr.error(message,title)
   }
 
 }

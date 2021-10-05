@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
+import {LoginService} from "./login.service";
+import {UserModel} from "../user-list/user-list.model";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-login',
@@ -9,9 +12,8 @@ import {Router} from "@angular/router";
   styleUrls: ['./login.component.sass']
 })
 export class LoginComponent implements OnInit {
-
   loginForm !: FormGroup
-  constructor(private formBuilder : FormBuilder, private http: HttpClient, private router: Router) { }
+  constructor(private formBuilder : FormBuilder, private api: LoginService, private router: Router, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
@@ -22,22 +24,39 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.http.get<any>("http://localhost:3000/registerUsers")
+    this.api.getUsers()
       .subscribe((res : any) => {
-        const user = res.find((a: any) => {
-          alert(a.password)
-          return a.email === this.loginForm.value.email && a.password === this.loginForm.value.password
-        })
-        if (user) {
-          alert("Login!!!")
-          this.loginForm.reset()
-          this.router.navigate(["userList"])
-        } else {
-          alert("User not found ")
-        }
+            const user = res.find((a: any) => {
+              return a.email === this.loginForm.value.email && a.password === this.loginForm.value.password
+            })
+            if (user) {
+              this.showToastrErr("User","has been found")
+              this.loginForm.reset()
+              this.postUser(user)
+            } else {
+              this.showToastrErr("User","not found")
+            }
+          }, (err: Error) => {
+            alert(err.message )
+          })
+  }
+
+  postUser(user: any) {
+    this.api.postUser(user)
+      .subscribe((res: any) => {
+        console.log('post')
+        this.router.navigate(["userList"])
       }, (err: Error) => {
-        alert(err.message )
+        alert(err.message)
       })
+  }
+
+  showToastrGood(message: string, title: string) {
+    this.toastr.error(message,title)
+  }
+
+  showToastrErr(message: string, title: string) {
+    this.toastr.error(message,title)
   }
 
 }

@@ -1,0 +1,30 @@
+<div *ngIf="(user | keyvalue)?.length" class="container mt-4 mb-4 p-3 d-flex justify-content-center pe-none">
+  <div class="card p-4">
+    <div class=" image d-flex flex-column justify-content-center align-items-center">
+      <button class="btn btn-secondary pe-auto">
+        <img style="border-radius: 50%;" [src]="user.avatar" width="100px" height="100px" alt="No photo added" />
+      </button>
+      <p *admin="user.admin" class="name text-success">ADMIN</p>
+      <p *admin="!user.admin" class="name text-success">Just user</p>
+      <span class="name mt-3">{{user.firstName}}</span>
+      <span class="name">{{user.lastName}}</span>
+      <span class="idd">{{user.email}}</span>
+      <div class="d-flex flex-row justify-content-center align-items-center mt-3">
+        <span class="number">{{user.age}}
+          <span class="follow">Нears</span>
+        </span>
+      </div>
+      <div class="text mt-3">
+        <span>{{user.firstName}} is {{user.gender}} and is a creator from {{user.city}} of minimalistic x
+          bold graphics and digital artwork.
+          <br>
+          <br>
+          Artist/ Creative Director by Day #NFT minting@ with FND night.
+        </span>
+      </div>
+      <div class="mt-5 bg-dark pe-auto rounded">
+        <span routerLink="/userList" class="text-light">UserList</span>
+      </div>
+    </div>
+  </div>
+</div>

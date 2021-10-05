@@ -9,6 +9,12 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import {RouterModule} from "@angular/router";
 import { AppRoutingModule } from './app-routing.module';
+import { SiteLayoutComponent } from './shared/layouts/site-layout/site-layout.component';
+import { FooterComponent } from './footer/footer.component';
+import { UserPageComponent } from './user-page/user-page.component';
+import { AdminDirective } from './admin.directive';
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {ToastrModule} from "ngx-toastr";
 
 
 @NgModule({
@@ -16,14 +22,25 @@ import { AppRoutingModule } from './app-routing.module';
     AppComponent,
     UserListComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    SiteLayoutComponent,
+    FooterComponent,
+    UserPageComponent,
+    AdminDirective
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      timeOut: 1000,
+      progressBar: true,
+      progressAnimation: 'increasing',
+      preventDuplicates: true
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

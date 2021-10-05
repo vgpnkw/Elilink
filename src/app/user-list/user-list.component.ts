@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {UserModel} from "./user-list.model";
 import {ApiService} from "../shared/api.service";
 import {Observable, Subscriber} from "rxjs";
 import {File} from "@angular/compiler-cli/src/ngtsc/file_system/testing/src/mock_file_system";
+import {Router, RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-user-list',
@@ -11,13 +12,19 @@ import {File} from "@angular/compiler-cli/src/ngtsc/file_system/testing/src/mock
   styleUrls: ['./user-list.component.sass']
 })
 export class UserListComponent implements OnInit {
+  searchValue !: FormGroup
   formValue ! : FormGroup
   userData !: any
   userModelObj : UserModel = new UserModel()
   updateBtn !: boolean
   addBtn !: boolean
   myimage !: string;
-  constructor(private formBuilder: FormBuilder, private api: ApiService) { }
+  constructor(private formBuilder: FormBuilder, private api: ApiService, private router: Router) {
+    this.searchValue = new FormGroup({
+
+      "searchValue": new FormControl("", [Validators.required, this.searchValidator, Validators.pattern('[a-zA-Z ]')])
+    });
+  }
 
   ngOnInit(): void {
     this.formValue = this.formBuilder.group({
@@ -27,7 +34,8 @@ export class UserListComponent implements OnInit {
       city: [''],
       age: [''],
       email: [''],
-      avatar: ['']
+      avatar: [''],
+      admin: []
     })
     this.getAllUsers()
   }
@@ -40,8 +48,7 @@ export class UserListComponent implements OnInit {
     this.userModelObj.email = this.formValue.value.email
     this.userModelObj.age = this.formValue.value.age
     this.userModelObj.avatar = this.myimage
-
-
+    this.formValue.value.admin ? this.userModelObj.admin = true : this.userModelObj.admin = false
 
     this.api.postUsers(this.userModelObj)
       .subscribe((res: any) => {
@@ -93,7 +100,7 @@ export class UserListComponent implements OnInit {
     this.userModelObj.email = this.formValue.value.email
     this.userModelObj.age = this.formValue.value.age
     this.userModelObj.avatar = this.myimage
-
+    this.formValue.value.admin ? this.userModelObj.admin = true : this.userModelObj.admin = false
     this.api.updateUsers(this.userModelObj, this.userModelObj.id)
       .subscribe((res: any) => {
         alert("Update ok!")
@@ -109,15 +116,6 @@ export class UserListComponent implements OnInit {
     this.addBtn = true
     this.updateBtn = false
   }
-
-  // myimage !: Observable<any>;
-
-  // changeFile($event: Event) {
-  //   // @ts-ignore
-  //   const file  = ($event.target as HTMLInputElement).files[0];
-  //   // @ts-ignore
-  //   this.convertToBase64(file);
-  // }
 
   onChange($event: Event) {
     // @ts-ignore
@@ -151,4 +149,19 @@ export class UserListComponent implements OnInit {
       subscriber.complete();
     };
   }
+
+
+  userClick(id: any) {
+    this.router.navigate(["userPage", id])
+  }
+
+  searchValidator(control: FormControl): {[s:string]:boolean}|null{
+
+    if(control.value==="нет"){
+      return {"userName": true};
+    }
+    return null;
+  }
+
+
 }
