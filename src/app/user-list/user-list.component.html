@@ -1,0 +1,99 @@
+<nav class="navbar navbar-light bg-dark">
+  <div class="container-fluid">
+    <h1 style="color: #fff">UserList</h1>
+    <div class="d-flex">
+      <button (click)="clickAddUser()" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-success ">Add User</button>
+      <button routerLink="/login" class="btn btn-danger mx-2">Logout</button>
+    </div>
+  </div>
+</nav>
+
+<table class="table mt-3">
+  <thead>
+  <tr>
+    <th scope="col">id</th>
+    <th scope="col">FirsName</th>
+    <th scope="col">LastName</th>
+    <th scope="col">Gender</th>
+    <th scope="col">City</th>
+    <th scope="col">Age</th>
+    <th scope="col">Email id</th>
+    <th scope="col">Avatar</th>
+    <th scope="col">Action</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let user of userData">
+    <td>{{user.id}}</td>
+    <td>{{user.firstName}}</td>
+    <td>{{user.lastName}}</td>
+    <td>{{user.gender}}</td>
+    <td>{{user.city}}</td>
+    <td>{{user.age}}</td>
+    <td>{{user.email}}</td>
+    <td *ngIf="user.avatar">
+      <img [src]="user.avatar" width="100px" height="100px" alt="" />
+    </td>
+    <td>
+      <button (click)="editUser(user)" class="btn btn-info" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" >Edit</button>
+      <button (click)="deleteUSer(user)" class="btn btn-danger mx-3">Delete</button>
+    </td>
+
+  </tr>
+  </tbody>
+</table>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">User Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="formValue">
+          <div class="mb-3">
+            <label for="exampleFirsName" class="form-label">FirsName</label>
+            <input type="text" formControlName="firstName" class="form-control" id="exampleFirsName" aria-describedby="emailHelp">
+          </div>
+          <div class="mb-3">
+            <label for="exampleLastName" class="form-label">LastName</label>
+            <input type="text" formControlName="lastName" class="form-control" id="exampleLastName">
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputGender" class="form-label">Gender</label>
+            <input type="text" formControlName="gender" class="form-control" id="exampleInputGender">
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputCity" class="form-label">City</label>
+            <input type="text" formControlName="city" class="form-control" id="exampleInputCity">
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputAge" class="form-label">Age</label>
+            <input type="text" formControlName="age" class="form-control" id="exampleInputAge">
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputEmail" class="form-label">Email</label>
+            <input type="text" formControlName="email" class="form-control" id="exampleInputEmail">
+          </div>
+
+
+          <div class="mb-3">
+            <label for="formFile" class="form-label">Default file input example</label>
+            <input (change)="onChange($event)" formControlName="avatar"  class="form-control" type="file" id="formFile">
+          </div>
+
+
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="cancel" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button *ngIf="updateBtn" (click)="updateUserDetails()" type="button" class="btn btn-primary">Update</button>
+        <button *ngIf="addBtn" (click)="postUserDetails()" type="button" class="btn btn-primary">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
